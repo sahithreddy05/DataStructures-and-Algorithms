@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "forward_list": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "valarray": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp"
+    },
+    "jupyter.jupyterServerType": "local",
+    "python.pythonPath": "D:\\Softwares\\python\\python.exe",
+    "java.project.sourcePaths": [
+        "8.DP",
+        "99.practice"
+    ],
+}
