@@ -1,10 +1,10 @@
-#include <iostream>
 #include <vector>
-#include<queue>
+#include <iostream>
+#include <queue>
 
 using namespace std;
 
-//200
+// 200
 void dfs_numIslands(vector<vector<char>> &grid, int i, int j, vector<vector<int>> &dir)
 {
 
@@ -40,7 +40,7 @@ int numIslands(vector<vector<char>> &grid)
     return components;
 }
 
-//695
+// 695
 int dfs_area(vector<vector<int>> &grid, int i, int j, vector<vector<int>> &dir)
 {
     int n = grid.size(), m = grid[0].size(), size = 0;
@@ -77,7 +77,7 @@ int maxAreaOfIsland(vector<vector<int>> &grid)
     return maxArea;
 }
 
-//463
+// 463
 int islandPerimeter(vector<vector<int>> &grid)
 {
     vector<vector<int>> dir{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
@@ -104,9 +104,9 @@ int islandPerimeter(vector<vector<int>> &grid)
     return 4 * onceCount - nbrcount;
 }
 
-//130 leetcode
+// 130 leetcode
 
- void dfs_surrounded(vector<vector<char>> &grid, int i, int j, vector<vector<int>> &dir)
+void dfs_surrounded(vector<vector<char>> &grid, int i, int j, vector<vector<int>> &dir)
 {
 
     int n = grid.size(), m = grid[0].size();
@@ -122,7 +122,7 @@ int islandPerimeter(vector<vector<int>> &grid)
         }
     }
 }
-    void solve(vector<vector<char>> &grid)
+void solve(vector<vector<char>> &grid)
 {
     vector<vector<int>> dir{{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
 
@@ -151,38 +151,38 @@ int islandPerimeter(vector<vector<int>> &grid)
         }
     }
 }
-//694
+// 694 == lintcode(860)
 
 // Journey to the Moon
-int dfs(int src,vector<vector<int>> &graph,vector<bool> &vis)
+int dfs(int src, vector<vector<int>> &graph, vector<bool> &vis)
 {
     int size = 1;
     vis[src] = true;
-    for(int v:graph[src])
+    for (int v : graph[src])
     {
-        if(!vis[v])
-        size += dfs(v,graph,vis);
+        if (!vis[v])
+            size += dfs(v, graph, vis);
     }
 
     return size;
 }
 
-long journeyToMoon(int n,vector<vector<int>> edges)
+long journeyToMoon(int n, vector<vector<int>> edges)
 {
     vector<vector<int>> graph(n);
-    for(vector<int> &e: edges)
+    for (vector<int> &e : edges)
     {
         graph[e[0]].push_back(e[1]);
         graph[e[1]].push_back(e[0]);
     }
 
-    vector<bool> vis(n,false);
+    vector<bool> vis(n, false);
     long sum = 0, ans = 0;
-    for(int i=0;i<n;i++)
+    for (int i = 0; i < n; i++)
     {
-        if(!vis[i])
+        if (!vis[i])
         {
-            int size = dfs(i,graph,vis);
+            int size = dfs(i, graph, vis);
             ans += size * sum;
             sum += size;
         }
@@ -190,56 +190,57 @@ long journeyToMoon(int n,vector<vector<int>> edges)
     return ans;
 }
 
-//207
+// 207
 
-bool canFinish(int N,vector<vector<int>> &prerequisites)
+bool canFinish(int N, vector<vector<int>> &prerequisites)
 {
     vector<vector<int>> graph(N);
-    vector<int> indegree(N,0);
+    vector<int> indegree(N, 0);
 
-    for(vector<int> &ar: prerequisites)
+    for (vector<int> &ar : prerequisites)
     {
         graph[ar[0]].push_back(ar[1]);
         indegree[ar[1]]++;
     }
-    
+
     queue<int> que;
-    for(int i=0;i<N;i++)
-    if(indegree[i] == 0) que.push(i);
+    for (int i = 0; i < N; i++)
+        if (indegree[i] == 0)
+            que.push(i);
 
     int vtxcount = 0;
-    while(que.size() != 0)
+    while (que.size() != 0)
     {
         int vtx = que.front();
         que.pop();
         vtxcount++;
-        for(int v:graph[vtx])
+        for (int v : graph[vtx])
         {
-            if(--indegree[v] == 0)
-            que.push(v);
+            if (--indegree[v] == 0)
+                que.push(v);
         }
     }
 
     return vtxcount == N;
 }
 
-//210
-vector<int> findOrder(int N,vector<vector<int>> &prerequisites)
+// 210
+vector<int> findOrder(int N, vector<vector<int>> &prerequisites)
 {
     vector<vector<int>> graph(N);
-    vector<int> indegree(N,0);
+    vector<int> indegree(N, 0);
 
-    for(vector<int> &ar: prerequisites)
+    for (vector<int> &ar : prerequisites)
     {
         graph[ar[1]].push_back(ar[0]);
         indegree[ar[0]]++;
     }
 
     queue<int> que;
-    for(int i=0;i<N;i++)
+    for (int i = 0; i < N; i++)
     {
-        if(indegree[i] == 0)
-        que.push(i);
+        if (indegree[i] == 0)
+            que.push(i);
     }
 
     vector<int> ans;
@@ -249,113 +250,112 @@ vector<int> findOrder(int N,vector<vector<int>> &prerequisites)
         que.pop();
 
         ans.push_back(vtx);
-        for(int v:graph[vtx])
+        for (int v : graph[vtx])
         {
-            if(--indegree[v] == 0)
-            que.push(v);
+            if (--indegree[v] == 0)
+                que.push(v);
         }
     }
-    
-    if(ans.size() != N)
-    ans.clear();
-    
+
+    if (ans.size() != N)
+        ans.clear();
 
     return ans;
 }
 
-bool dfs_isCycle(int src,vector<int> &vis,vector<int> &ans,vector<vector<int>> &graph)
+bool dfs_isCycle(int src, vector<int> &vis, vector<int> &ans, vector<vector<int>> &graph)
 {
     vis[src] = 1;
     bool isCycle = false;
-    for(int v: graph[src])
+    for (int v : graph[src])
     {
-        if(vis[v] == 0 )
+        if (vis[v] == 0)
         {
-            isCycle = isCycle || dfs_isCycle(v,vis,ans,graph);
+            isCycle = isCycle || dfs_isCycle(v, vis, ans, graph);
         }
-        else if(vis[v] == 1)
-        return true;
+        else if (vis[v] == 1)
+            return true;
     }
 
     ans.push_back(src);
     vis[src] = 2;
     return isCycle;
-
 }
 
-vector<int> findOrder(int N,vector<vector<int>> &prerequisites)
+vector<int> findOrder(int N, vector<vector<int>> &prerequisites)
 {
     vector<vector<int>> graph(N);
-    for(vector<int> &ar:prerequisites)
+    for (vector<int> &ar : prerequisites)
     {
         graph[ar[0]].push_back(ar[1]);
     }
 
     vector<int> ans;
-    vector<int> vis(N,0);
+    vector<int> vis(N, 0);
 
     bool cycle = false;
-    for(int i=0;i<N;i++)
+    for (int i = 0; i < N; i++)
     {
-        if(vis[i]==0)
+        if (vis[i] == 0)
         {
-            cycle = cycle || dfs_isCycle(i,vis,ans,graph);
-        }   
+            cycle = cycle || dfs_isCycle(i, vis, ans, graph);
+        }
     }
-    if(cycle) ans.clear();
+    if (cycle)
+        ans.clear();
 
     return ans;
 }
 
 // 329
-int longestIncreasingPath(vector<vector<int>>& matrix) {
-
-int n = matrix.size(), m = matrix[0].size();
-vector<vector<int>> indegree(n,vector<int>(m,0));
-
-vector<vector<int>> dir{{0,1},{0,-1},{1,0},{-1,0}};
-
-queue<int> que;
-
-for(int i=0;i<n;i++)
+int longestIncreasingPath(vector<vector<int>> &matrix)
 {
-    for(int j=0;j<m;j++)
+
+    int n = matrix.size(), m = matrix[0].size();
+    vector<vector<int>> indegree(n, vector<int>(m, 0));
+
+    vector<vector<int>> dir{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    queue<int> que;
+
+    for (int i = 0; i < n; i++)
     {
-        for(vector<int> &d:dir)
+        for (int j = 0; j < m; j++)
         {
-            int r = i + d[0];
-            int c = j + d[1];
-            if(r >=0 && c >=0 && r < n && c< m && matrix[r][c] < matrix[i][j])
+            for (vector<int> &d : dir)
             {
-                indegree[i][j]++;
+                int r = i + d[0];
+                int c = j + d[1];
+                if (r >= 0 && c >= 0 && r < n && c < m && matrix[r][c] < matrix[i][j])
+                {
+                    indegree[i][j]++;
+                }
             }
-        }        
 
-        if(indegree[i][j] == 0)
-        que.push(i * m + j);
-    }
-}
-
-int level = 0;
-while (que.size() != 0)
-{
-    int size = que.size();
-    while(size-- > 0)
-    {
-        int idx = que.front();
-        que.pop();
-        int i = idx/m , j = idx % m;
-
-        for(vector<int> &d:dir)
-        {
-            int r = i + d[0];
-            int c = j + d[1];
-            if(r>= 0 && c>=0 && r < n && c < m && matrix[r][c] > matrix[i][j] && --indegree[r][c] == 0)
-                que.push(r*m+c);
+            if (indegree[i][j] == 0)
+                que.push(i * m + j);
         }
     }
-    level++;
-}
-    return level;
 
+    int level = 0;
+    while (que.size() != 0)
+    {
+        int size = que.size();
+        while (size-- > 0)
+        {
+            int idx = que.front();
+            que.pop();
+            int i = idx / m, j = idx % m;
+
+            for (vector<int> &d : dir)
+            {
+                int r = i + d[0];
+                int c = j + d[1];
+                if (r >= 0 && c >= 0 && r < n && c < m && matrix[r][c] > matrix[i][j] && --indegree[r][c] == 0)
+                    que.push(r * m + c);
+            }
+        }
+        level++;
+    }
+    return level;
 }

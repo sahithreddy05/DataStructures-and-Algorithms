@@ -238,6 +238,88 @@ public class l003TraversalSet {
         }
         return rv;
     }
-    
 
+    // Kth largest ele
+    public TreeNode cdll(TreeNode root) {
+        TreeNode dummy = new TreeNode(-1);
+        TreeNode curr = root, prev = dummy;
+        while (curr != null) {
+            TreeNode left = curr.left;
+            if (left == null) {
+                prev.right = curr;
+                curr.left = prev;
+                prev = prev.right;
+
+                curr = curr.right;
+            } else {
+                TreeNode rightMostNode = getRightMostNode(left, curr);
+                if (rightMostNode.right == null) {
+                    rightMostNode.right = curr;
+                    curr = curr.left;
+                } else {
+
+                    rightMostNode.right = null;
+
+                    prev.right = curr;
+                    curr.left = prev;
+                    prev = prev.right;
+
+                    curr = curr.right;
+                }
+            }
+        }
+
+        TreeNode head = dummy.right;
+        dummy.right = head.left = null;
+
+        // for circular doubly linkedlist
+        head.left = prev;
+        prev.right = head;
+
+        return head;
+    }
+
+    // pred and successor for binary tree.
+    public static void findPreSuc(TreeNode root, int key) {
+        TreeNode curr = root, prev = null, pred = null, succ = null;
+        while (curr != null) {
+            TreeNode left = curr.left;
+            if (left == null) {
+                if (curr.val == key) {
+                    pred = prev;
+                }
+
+                if (prev != null && prev.val == key) {
+                    succ = curr;
+                }
+
+                prev = curr;
+                curr = curr.right;
+            } else {
+                TreeNode rmn = getRightMostNode(left, curr); // right most node
+                if (rmn.right == null) {
+                    rmn.right = curr;
+                    curr = curr.left;
+                } else {
+                    rmn.right = null;
+
+                    if (curr.val == key) {
+                        pred = prev;
+                    }
+
+                    if (prev != null && prev.val == key) {
+                        succ = curr;
+                    }
+
+                    prev = curr;
+                    curr = curr.right;
+                }
+            }
+
+        }
+    }
+
+    // pred and successor for binary search tree.
+
+     
 }

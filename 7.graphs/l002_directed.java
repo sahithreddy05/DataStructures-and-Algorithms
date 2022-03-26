@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -10,7 +11,7 @@ public class l002_directed {
             this.w = w;
         }
     }
-    
+
     public static void addEdge(ArrayList<Edge>[] graph, int u, int v, int w) {
         graph[u].add(new Edge(v, w));
         graph[v].add(new Edge(u, w));
@@ -27,45 +28,35 @@ public class l002_directed {
         }
     }
 
-    public static void topo_DFS(int src,ArrayList<Edge>[] graph,boolean[] vis,ArrayList<Integer> ans)
-    {
+    public static void topo_DFS(int src, ArrayList<Edge>[] graph, boolean[] vis, ArrayList<Integer> ans) {
         vis[src] = true;
-        for(Edge e: graph[src])
-        {
-            if(!vis[e.v])
-            {
-                topo_DFS(e.v, graph, vis,ans);
+        for (Edge e : graph[src]) {
+            if (!vis[e.v]) {
+                topo_DFS(e.v, graph, vis, ans);
             }
         }
 
         ans.add(src);
     }
 
-
-    public static void topologicalOrder(int n,ArrayList<Edge>[] graph)
-    {
+    public static void topologicalOrder(int n, ArrayList<Edge>[] graph) {
         boolean[] vis = new boolean[n];
         ArrayList<Integer> ans = new ArrayList<>();
-        for(int i=0;i<n;i++)
-        {
-            if(!vis[i])
-            {
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) {
                 topo_DFS(i, graph, vis, ans);
             }
         }
-        for(int i=ans.size()-1;i>=0;i--)
-        {
+        for (int i = ans.size() - 1; i >= 0; i--) {
             System.out.println(ans.get(i));
         }
-    } 
+    }
 
-    public static ArrayList<Integer> kahnsAlgo(int n,ArrayList<Edge>[] graph) {
-        
+    public static ArrayList<Integer> kahnsAlgo(int n, ArrayList<Edge>[] graph) {
+
         int[] indegree = new int[n];
-        for(ArrayList<Edge> edgesList: graph)
-        {
-            for(Edge e: edgesList)
-            {
+        for (ArrayList<Edge> edgesList : graph) {
+            for (Edge e : edgesList) {
                 indegree[e.v]++;
             }
         }
@@ -74,37 +65,71 @@ public class l002_directed {
         ArrayList<Integer> ans = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
-            if(indegree[i] == 0)
-            que.addLast(i);
+            if (indegree[i] == 0)
+                que.addLast(i);
         }
 
         int level = 0;
-        while(que.size() != 0)
-        {
+        while (que.size() != 0) {
             int size = que.size();
-            while(size-- > 0)
-            {
+            while (size-- > 0) {
                 int vtx = que.removeFirst();
                 ans.add(vtx);
 
-                for(Edge e: graph[vtx])
-                {
-                    if(--indegree[e.v] == 0)
-                    que.addLast(e.v);
+                for (Edge e : graph[vtx]) {
+                    if (--indegree[e.v] == 0)
+                        que.addLast(e.v);
                 }
             }
 
-        level++;
+            level++;
 
         }
-        if(ans.size() != n)
-        {
+
+        if (ans.size() != n) {
             System.out.println("topological Order is not possible due to Cycle");
             ans.clear();
         }
         return ans;
     }
-    
+
+    public static void kahnsAlgo_01(int n, ArrayList<Edge>[] graph) {
+        int[] indegree = new int[n];
+        for (ArrayList<Edge> edgesList : graph) {
+            for (Edge e : edgesList) {
+                indegree[e.v]++;
+            }
+        }
+
+        LinkedList<Integer> que = new LinkedList<>();
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+
+        for (int i = 0; i < n; i++)
+            if (indegree[i] == 0)
+                que.addLast(i);
+
+        int level = 0;
+        while (que.size() != 0) {
+            int size = que.size();
+            ArrayList<Integer> smallAns = new ArrayList<>();
+            while (size-- > 0) {
+                int vtx = que.removeFirst();
+                smallAns.add(vtx);
+
+                for (Edge e : graph[vtx]) {
+                    if (--indegree[e.v] == 0)
+                        que.addLast(e.v);
+                }
+            }
+            ans.add(smallAns);
+            level++;
+        }
+        if (ans.size() != n) {
+            System.out.println("Topological Order is not possible due to Cycle");
+            ans.clear();
+        }
+    }
+
     public static void constructGraph() {
         int V = 7;
         ArrayList<Edge>[] graph = new ArrayList[V];

@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 public class l002_stringSet {
 
@@ -52,6 +54,14 @@ public class l002_stringSet {
         return dp[I][J];
     }
 
+    public int longestPalindromeSubseq(String s) {
+        int n = s.length();
+        int[][] dp = new int[n][n];
+        int ans = lpss(s, 0, n - 1, dp);
+
+        return ans;
+    }
+
     public static int lcss(String str1, String str2, int n, int m, int[][] dp) {
         if (n == 0 || m == 0) {
             return dp[n][m] = 0;
@@ -85,6 +95,31 @@ public class l002_stringSet {
         return dp[N][M];
     }
 
+    // longest common substring
+    public int lcsubstring_DP(String str1, String str2, int N, int M) {
+        int[][] dp = new int[N + 1][M + 1];
+        int maxLen = 0, ei = 0;
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (n == 0 || m == 0) {
+                    dp[n][m] = 0;
+                    continue;
+                }
+
+                if (str1.charAt(n - 1) == str2.charAt(m - 1)) {
+                    dp[n][m] = dp[n - 1][m - 1] + 1;
+                    if (dp[n][m] > maxLen) {
+                        maxLen = dp[n][m];
+                        ei = n - 1;
+                    }
+                }
+            }
+        }
+
+        return maxLen;
+    }
+
+    // 583
     public int longestCommonSubsequence(String text1, String text2) {
 
         int n = text1.length(), m = text2.length();
@@ -95,6 +130,11 @@ public class l002_stringSet {
         return ans;
     }
 
+    public int minDistance_1(String word1, String word2) {
+        return word1.length() + word2.length() - 2 * longestCommonSubsequence(word1, word2);
+    }
+
+    // 115
     public int numDistinct(String s, String t, int n, int m, int[][] dp) {
         if (m == 0) {
             return dp[n][m] = 1;
@@ -151,6 +191,7 @@ public class l002_stringSet {
         return ans;
     }
 
+    // 72
     public int minDistance(String s, String t, int n, int m, int[][] dp) {
 
         if (n == 0 || m == 0) {
@@ -188,7 +229,6 @@ public class l002_stringSet {
             return dp[n][m] = Math.min(Math.min(insert + cost[0], delete + cost[2]), replace + cost[2]);
     }
 
-    // 72
     public int minDistance(String s, String t) {
         int n = s.length(), m = t.length();
         int[][] dp = new int[n + 1][m + 1];
@@ -285,4 +325,153 @@ public class l002_stringSet {
         return ans;
     }
 
+    // 1458
+    public int maximum(int... arr) {
+        int max = arr[0];
+        for (int ele : arr)
+            max = Math.max(ele, max);
+
+        return max;
+    }
+
+    public int maxDotProduct(int[] nums1, int[] nums2, int n, int m, int[][] dp) {
+
+        if (n == 0 || m == 0) {
+            return dp[n][m] = -(int) 1e8;
+        }
+
+        if (dp[n][m] != -(int) 1e9)
+            return dp[n][m];
+
+        int val = nums1[n - 1] * nums2[m - 1];
+        int acceptBothNumbers = maxDotProduct(nums1, nums2, n - 1, m - 1, dp) + val;
+        int a = maxDotProduct(nums1, nums2, n - 1, m, dp);
+        int b = maxDotProduct(nums1, nums2, n, m - 1, dp);
+
+        return dp[n][m] = maximum(val, acceptBothNumbers, a, b);
+    }
+
+    // public int maxDotProduct(int[] nums1, int[] nums2) {
+    // int n = nums1.length, m = nums2.length;
+    // int[][] dp = new int[n + 1][m + 1];
+    // for (int i = 0; i <= n; i++)
+    // dp[i][0] = Integer.MIN_VALUE;
+    // for (int i = 0; i <= m; i++)
+    // dp[0][i] = Integer.MIN_VALUE;
+
+    // for (int i = 1; i <= n; i++) {
+    // for (int j = 1; j <= m; j++) {
+    // int curr = nums1[i - 1] * nums2[j - 1];
+    // if (dp[i - 1][j - 1] == Integer.MIN_VALUE)
+    // dp[i][j] = maximum(curr, dp[i][j - 1], dp[i - 1][j]);
+    // else
+    // dp[i][j] = maximum(curr, dp[i - 1][j - 1] + curr, dp[i][j - 1], dp[i -
+    // 1][j]);
+    // }
+    // }
+    // return dp[n][m];
+    // }
+
+    public int maxDotProduct(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -(int) 1e9);
+        int ans = maxDotProduct(nums1, nums2, n, m, dp);
+        return ans;
+    }
+
+    // 005
+    public String longestPalindrome(String s) {
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+
+        int MaxLen = 0, si = 0;
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                if (gap == 0)
+                    dp[i][j] = true;
+                else if (gap == 1 && s.charAt(i) == s.charAt(j))
+                    dp[i][j] = true;
+                else
+                    dp[i][j] = s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
+
+                if (dp[i][j] == true) {
+                    if (j - i + 1 > MaxLen) {
+                        MaxLen = j - i + 1;
+                        si = i;
+                    }
+                }
+            }
+        }
+        return s.substring(si, si + MaxLen);
+    }
+
+    // 132
+    public int minCut(String s, int si, int ei, int[] dp, boolean[][] pdp) {
+        if (pdp[si][ei])
+            return 0;
+
+        if (dp[si] != -1)
+            return dp[si];
+
+        int minAns = (int) 1e8;
+        for (int cut = si; cut <= ei; cut++) {
+            if (pdp[si][cut]) {
+                minAns = Math.min(minAns, minCut(s, cut + 1, ei, dp, pdp) + 1);
+            }
+        }
+
+        return dp[si] = minAns;
+    }
+
+    // faafaaaaabaageeg
+    public int minCut(String s) {
+        int n = s.length();
+        boolean[][] pdp = new boolean[n][n];
+        int count = 0, MaxLen = 0, si = 0;
+        for (int gap = 0; gap < n; gap++)
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                if (gap == 0)
+                    pdp[i][j] = true;
+                else if (gap == 1 && s.charAt(i) == s.charAt(j))
+                    pdp[i][j] = true;
+                else
+                    pdp[i][j] = s.charAt(i) == s.charAt(j) && pdp[i + 1][j - 1];
+            }
+
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+        return minCut(s, 0, n - 1, dp, pdp);
+    }
+
+    // followUp Question : ai-bj-ck-dl-em-fn
+    // HM : 1278. Palindrome Partitioning III
+
+    // 139
+    public boolean wordBreak(String s, List<String> wordDict) {
+        HashSet<String> set = new HashSet<>();
+        int len = 0, n = s.length();
+        for (String ss : wordDict) {
+            set.add(ss);
+            len = Math.max(len, ss.length());
+        }
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = true;
+        for (int i = 0; i <= n; i++) {
+            if (dp[i] == false)
+                continue;
+
+            for (int l = 1; l <= len && i + l <= n; l++) {
+                String substr = s.substring(i, i + l);
+                if (set.contains(substr)) {
+                    dp[i + l] = true;
+                }
+            }
+        }
+        return dp[n];
+    }
+
+    
+    
 }

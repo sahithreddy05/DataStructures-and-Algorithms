@@ -116,5 +116,27 @@ public class l002BST {
     // Solution)
     // 510. Inorder Successor in BST II
 
-}
 
+    public static TreeNode leftMost(TreeNode root){
+        while(root.left != null) {
+            root = root.left;
+        }
+        return root;
+    }
+
+    public static void predSucc0(TreeNode root, int data) {
+        TreeNode curr = root, succ = null, pred = null;
+
+        while (curr != null) {
+            if (curr.val == data) {
+
+            } else if (curr.val < data) {
+                curr = curr.right;
+            } else {
+                succ = curr;
+                curr = curr.left;
+
+            }
+        }
+    }
+}
