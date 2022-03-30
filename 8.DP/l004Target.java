@@ -63,6 +63,13 @@ public class l004Target {
         return dp[n][tar] = count;
     }
 
+    public static int combination_DP(int[] arr, int Tar, int[] dp) {
+
+        return dp[Tar];
+    }
+
+    // -1: not explored, 0 : false, 1: true
+
     public static void fill2D(int[][] dp) {
         for (int[] d : dp)
             Arrays.fill(d, -1);
@@ -80,6 +87,55 @@ public class l004Target {
         display2D(dp);
 
         // display(dp);
+    }
+
+    public static int targetSum(int[] arr, int n, int tar, int[][] dp) {
+
+        if (n == 0 || tar == 0) {
+            return dp[n][tar] = tar == 0 ? 1 : 0;
+        }
+        boolean res = false;
+        if (tar - arr[n - 1] >= 0)
+            res = res || targetSum(arr, n - 1, tar - arr[n - 1], dp) == 1;
+
+        res = res || targetSum(arr, n - 1, tar, dp) == 1;
+
+        return res ? 1 : 0;
+    }
+
+    public static Boolean isSubsetSum(int N, int arr[], int sum) {
+
+        int[][] dp = new int[N + 1][sum + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        int ans = targetSum(arr, N, sum, dp);
+        return ans == 1;
+    }
+
+    public static int knapSack(int W, int wt[], int val[], int n, int[][] dp) {
+
+        if (n == 0 || W == 0) {
+            return dp[n][W];
+        }
+
+        if (dp[n][W] != -1)
+            return dp[n][W];
+
+        int maxAns = 0;
+        if (W - wt[n - 1] >= 0)
+            maxAns = Math.max(maxAns, knapSack(W - wt[n - 1], wt, val, n - 1, dp) + val[n - 1]);
+        maxAns = Math.max(maxAns, knapSack(W, wt, val, n - 1, dp));
+
+        return dp[n][W] = maxAns;
+    }
+
+    public static int knapSack(int W, int[] wt, int val[], int N) {
+        int[][] dp = new int[N + 1][W + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        return knapSack(W, wt, val, N, dp);
     }
 
     public static void main(String[] args) {
