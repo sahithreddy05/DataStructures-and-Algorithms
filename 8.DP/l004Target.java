@@ -64,11 +64,15 @@ public class l004Target {
     }
 
     public static int combination_DP(int[] arr, int Tar, int[] dp) {
-
+        dp[0] = 1;
+        for (int ele : arr) {
+            for (int tar = ele; tar <= Tar; tar++) {
+                if (tar - ele >= 0)
+                    dp[tar] += dp[tar - ele];
+            }
+        }
         return dp[Tar];
     }
-
-    // -1: not explored, 0 : false, 1: true
 
     public static void fill2D(int[][] dp) {
         for (int[] d : dp)
@@ -89,11 +93,32 @@ public class l004Target {
         // display(dp);
     }
 
+    // 377
+    // 322
+    public int coinChange(int[] arr, int Tar) {
+        int[] dp = new int[Tar + 1];
+        Arrays.fill(dp, -1);
+
+        dp[0] = 0;
+        for (int tar = 1; tar <= Tar; tar++) {
+            for (int ele : arr) {
+                if (tar - ele >= 0)
+                    dp[tar] = Math.min(dp[tar - ele] + 1, dp[tar]);
+            }
+        }
+        return dp[Tar] != (int) 1e9 ? dp[Tar] : -1;
+    }
+
+    // -1 : not explored, 0 : false, 1 : true
     public static int targetSum(int[] arr, int n, int tar, int[][] dp) {
 
         if (n == 0 || tar == 0) {
             return dp[n][tar] = tar == 0 ? 1 : 0;
         }
+
+        if (dp[n][tar] != -1)
+            return dp[n][tar];
+
         boolean res = false;
         if (tar - arr[n - 1] >= 0)
             res = res || targetSum(arr, n - 1, tar - arr[n - 1], dp) == 1;
@@ -112,6 +137,8 @@ public class l004Target {
         int ans = targetSum(arr, N, sum, dp);
         return ans == 1;
     }
+
+// =======================================================================================
 
     public static int knapSack(int W, int wt[], int val[], int n, int[][] dp) {
 
