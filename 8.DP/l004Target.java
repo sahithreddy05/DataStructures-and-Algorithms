@@ -140,10 +140,55 @@ public class l004Target {
 
     // =======================================================================================
 
-    public static int knapSack(int W, int wt[], int val[], int n, int[][] dp) {
+    // back engineering
+    public static boolean targetSum_DP(int[] arr, int N, int Tar, boolean[][] dp) {
+        for (int n = 0; n <= N; n++) {
+            for (int tar = 0; tar <= Tar; tar++) {
+                if (n == 0 || tar == 0) {
+                    dp[n][tar] = (tar == 0);
+                    continue;
+                }
+
+                if (tar - arr[n - 1] >= 0)
+                    dp[n][tar] = dp[n][tar] || dp[n - 1][tar - arr[n - 1]];
+                dp[n][tar] = dp[n][tar] || dp[n - 1][tar];
+            }
+        }
+
+        return dp[N][Tar];
+    }
+
+    // back Engineering
+    public static int targetSum_path(int[] arr, int N, boolean[][] dp, int tar, String psf) {
+        if (N == 0 || tar == 0) {
+            if (tar == 0) {
+                System.out.println(psf);
+                return 1;
+            }
+            return 0;
+        }
+
+        int count = 0;
+        if (tar - arr[N - 1] >= 0 && dp[N - 1][tar - arr[N - 1]])
+            count += targetSum_path(arr, N - 1, dp, tar - arr[N - 1], psf + arr[N - 1] + " ");
+        if (dp[N - 1][tar])
+            count += targetSum_path(arr, N - 1, dp, tar, psf);
+
+        return count;
+    }
+
+    public static void targetSum_backEngg() {
+        int[] arr = { 2, 3, 5, 7 };
+        int tar = 10, N = 4;
+        boolean[][] dp = new boolean[N + 1][tar + 1];
+        System.out.println(targetSum_DP(arr, N, tar, dp));
+        System.out.println(targetSum_path(arr, N, dp, tar, ""));
+    }
+
+    public static int knapsack(int W, int wt[], int val[], int n, int[][] dp) {
 
         if (n == 0 || W == 0) {
-            return dp[n][W];
+            return dp[n][W] = 0;
         }
 
         if (dp[n][W] != -1)
@@ -151,22 +196,80 @@ public class l004Target {
 
         int maxAns = 0;
         if (W - wt[n - 1] >= 0)
-            maxAns = Math.max(maxAns, knapSack(W - wt[n - 1], wt, val, n - 1, dp) + val[n - 1]);
-        maxAns = Math.max(maxAns, knapSack(W, wt, val, n - 1, dp));
+            maxAns = Math.max(maxAns, knapsack(W - wt[n - 1], wt, val, n - 1, dp) + val[n - 1]);
+        maxAns = Math.max(maxAns, knapsack(W, wt, val, n - 1, dp));
 
-        return dp[n][W] = maxAns;
+        return dp[n][W];
     }
 
-    public static int knapSack(int W, int[] wt, int val[], int N) {
+    public static int knapsack(int W, int wt[], int val[], int N) {
         int[][] dp = new int[N + 1][W + 1];
         for (int[] d : dp)
             Arrays.fill(d, -1);
 
-        return knapSack(W, wt, val, N, dp);
+        return knapsack(W, wt, val, N, dp);
     }
-    
+
     // https://www.geeksforgeeks.org/find-number-of-solutions-of-a-linear-equation-of-n-variables/
     // https://practice.geeksforgeeks.org/problems/knapsack-with-duplicate-items4201/1
+
+    public static int unboundedKnapsack(int[] wt, int[] val, int bagWeight) {
+
+        int n = wt.length;
+        int[] dp = new int[bagWeight + 1];
+        for (int weight = 0; weight <= bagWeight; weight++) {
+            for (int i = 0; i < wt.length; i++) {
+                if (weight - wt[i] >= 0)
+                    dp[weight] = Math.max(dp[weight], dp[weight - wt[i]] + val[i]);
+            }
+        }
+
+        return dp[bagWeight];
+    }
+
+    // 416
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int ele : nums)
+            sum += ele;
+
+        if (sum % 2 != 0)
+            return false;
+
+        int tar = sum / 2, n = nums.length;
+        boolean[][] dp = new boolean[n + 1][tar + 1];
+        return targetSum_DP(nums, n, tar, dp);
+    }
+
+    // 494
+    public int findTargetSumWays(int[] nums, int n, int sum, int target, int[][] dp) {
+        if (n == 0) {
+            return dp[n][sum] = target == sum ? 1 : 0;
+        }
+
+        if (dp[n][sum] != -1)
+            return dp[n][sum];
+
+        int count = 0;
+        count += findTargetSumWays(nums, n - 1, sum + nums[n - 1], target, dp);
+        count += findTargetSumWays(nums, n - 1, sum - nums[n - 1], target, dp);
+
+        return dp[n][sum] = count;
+    }
+
+    public int findTargetSumWays(int[] nums, int target) {
+        int sum = 0, n = nums.length;
+        for (int ele : nums)
+            sum += ele;
+        if (target > sum || target < -sum)
+            return 0;
+
+        int[][] dp = new int[n + 1][2 * sum + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        return findTargetSumWays(nums, n, sum, sum + target, dp);
+    }
 
     public static void main(String[] args) {
         target();
