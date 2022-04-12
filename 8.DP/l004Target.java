@@ -138,7 +138,7 @@ public class l004Target {
         return ans == 1;
     }
 
-// =======================================================================================
+    // =======================================================================================
 
     public static int knapSack(int W, int wt[], int val[], int n, int[][] dp) {
 
@@ -164,6 +164,9 @@ public class l004Target {
 
         return knapSack(W, wt, val, N, dp);
     }
+    
+    // https://www.geeksforgeeks.org/find-number-of-solutions-of-a-linear-equation-of-n-variables/
+    // https://practice.geeksforgeeks.org/problems/knapsack-with-duplicate-items4201/1
 
     public static void main(String[] args) {
         target();
