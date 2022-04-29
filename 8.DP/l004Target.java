@@ -97,9 +97,9 @@ public class l004Target {
     // 322
     public int coinChange(int[] arr, int Tar) {
         int[] dp = new int[Tar + 1];
-        Arrays.fill(dp, -1);
-
+        Arrays.fill(dp, (int) 1e9);
         dp[0] = 0;
+
         for (int tar = 1; tar <= Tar; tar++) {
             for (int ele : arr) {
                 if (tar - ele >= 0)
@@ -111,7 +111,6 @@ public class l004Target {
 
     // -1 : not explored, 0 : false, 1 : true
     public static int targetSum(int[] arr, int n, int tar, int[][] dp) {
-
         if (n == 0 || tar == 0) {
             return dp[n][tar] = tar == 0 ? 1 : 0;
         }
